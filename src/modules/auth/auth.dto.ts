@@ -19,3 +19,9 @@ export class LoginDto {
     @IsNotEmpty()
     password: string
 }
+
+export class GetSessionDto {
+    @IsString()
+    @IsNotEmpty()
+    userId: string
+} 

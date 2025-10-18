@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { UserRepository } from "../user/user.repository";
-import { LoginDto, RegisterDto } from "./auth.dto";
+import { GetSessionDto, LoginDto, RegisterDto } from "./auth.dto";
 import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
 
@@ -29,10 +29,19 @@ export class AuthService {
         if (!comparePassword) {
             throw new BadRequestException("Password yang anda masukan salah")
         }
-        const accessToken = this.jwtService.sign({ userId: existingUser.userId }, {
+        const accessToken = await this.jwtService.sign({ userId: existingUser.userId }, {
             expiresIn: "1d",
         })
 
         return { message: "Login berhasil", statusCode: HttpStatus.OK, accessToken }
+    }
+
+    async getSession(dto: GetSessionDto) {
+        const existingUser = await this.userRepo.getByUserId({ userId: dto.userId })
+        if (!existingUser) {
+            throw new NotFoundException("Akun tidak ditemukan")
+        }
+
+        return { message: "Berhasil mendapatkan sesi login", statusCode: HttpStatus.OK, data: existingUser }
     }
 }
