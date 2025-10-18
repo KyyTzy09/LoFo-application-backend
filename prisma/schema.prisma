@@ -12,3 +12,12 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  userId      String  @id @default(ulid())
+  phoneNumber Int     @unique
+  password    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
