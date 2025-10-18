@@ -6,7 +6,7 @@ services:
     container_name: mysql-container
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: finder-app123
       MYSQL_DATABASE: finder_app       
     ports:
       - "3306:3306"
