@@ -8,6 +8,11 @@ export class RegisterDto {
     @IsString()
     @IsNotEmpty()
     password: string
+
+
+    @IsString()
+    @IsNotEmpty()
+    username: string
 }
 
 export class LoginDto {

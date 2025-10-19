@@ -19,6 +19,16 @@ model User {
   phoneNumber String @unique
   password    String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  profile   Profile[]
+}
+
+model Profile {
+  userId   String @id
+  username String
+  info     String?  @default("Pengguna belum menambahkan info.")
+  address   String?
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
 }

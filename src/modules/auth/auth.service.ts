@@ -3,10 +3,11 @@ import { UserRepository } from "../user/user.repository";
 import { GetSessionDto, LoginDto, RegisterDto } from "./auth.dto";
 import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
+import { ProfileRepository } from "../profile/profile.repository";
 
 @Injectable()
 export class AuthService {
-    constructor(private jwtService: JwtService, private readonly userRepo: UserRepository) { }
+    constructor(private jwtService: JwtService, private readonly userRepo: UserRepository, private readonly profileRepo: ProfileRepository) { }
 
     async register(dto: RegisterDto) {
         const existingUser = await this.userRepo.getByPhoneNumber({ phoneNumber: dto.phoneNumber })
@@ -16,6 +17,7 @@ export class AuthService {
 
         const hashedPassword = await bcrypt.hash(dto.password, 10)
         const createdUser = await this.userRepo.createUser({ phoneNumber: dto.phoneNumber, password: hashedPassword })
+        await this.profileRepo.createProfile({ userId: createdUser.userId, name: dto.username })
         return { message: "Berhasil membuat akun baru", statusCode: HttpStatus.CREATED, data: createdUser }
     }
 
