@@ -24,6 +24,48 @@ export class ProfileRepository {
         })
     }
 
+    async updateUsername(data: { userId: string, username: string }): Promise<Partial<Profile>> {
+        return await this.prisma.profile.update({
+            where: {
+                userId: data.userId
+            },
+            data: {
+                username: data.username
+            },
+            select: {
+                username: true
+            }
+        })
+    }
+
+    async updateInfo(data: { userId: string, info: string }): Promise<Partial<Profile>> {
+        return await this.prisma.profile.update({
+            where: {
+                userId: data.userId
+            },
+            data: {
+                info: data.info
+            },
+            select: {
+                info: true
+            }
+        })
+    }
+
+    async updateAddress(data: { userId: string, address: string }): Promise<Partial<Profile>> {
+        return await this.prisma.profile.update({
+            where: {
+                userId: data.userId
+            },
+            data: {
+                address: data.address
+            },
+            select: {
+                address: true
+            }
+        })
+    }
+
     async updateProfile(data: { userId: string, username: string, info: string, address: string }): Promise<Profile> {
         return await this.prisma.profile.update({
             where: {
