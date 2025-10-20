@@ -1,11 +1,20 @@
 import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { ProfileRepository } from "./profile.repository";
 import { UserRepository } from "../user/user.repository";
-import { UpdateAddressDto, UpdateInfoDto, UpdateProfileDto, UpdateUsernameDto } from "./profile.dto";
+import { GetProfileDto, UpdateAddressDto, UpdateInfoDto, UpdateProfileDto, UpdateUsernameDto } from "./profile.dto";
 
 @Injectable()
 export class ProfileService {
     constructor(private readonly profileRepo: ProfileRepository, private readonly userRepo: UserRepository) { }
+
+    async getUserProfile(dto: GetProfileDto) {
+        const existingProfile = await this.profileRepo.findByUserId({ userId: dto.userId })
+        if (!existingProfile) {
+            throw new NotFoundException("Profile not found")
+        }
+
+        return { message: "Profile retrieved successfull", statusCode: HttpStatus.OK, data: existingProfile }
+    }
 
     async updateUsername(dto: UpdateUsernameDto) {
         const existingProfile = await this.profileRepo.findByUserId({ userId: dto.userId })

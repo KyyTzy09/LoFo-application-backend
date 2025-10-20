@@ -1,4 +1,4 @@
-import { Controller, Patch, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, Patch, Req, UseGuards } from "@nestjs/common";
 import { ProfileService } from "./profile.service";
 import { AuthGuard } from "src/shared/guards/auth.guard";
 import { UpdateAddressDto, UpdateInfoDto, UpdateProfileDto, UpdateUsernameDto } from "./profile.dto";
@@ -6,6 +6,13 @@ import { UpdateAddressDto, UpdateInfoDto, UpdateProfileDto, UpdateUsernameDto } 
 @Controller("profile")
 export class ProfileController {
     constructor(private readonly profileService: ProfileService) { }
+
+    // Get your profile data
+    @Get("get")
+    @UseGuards(AuthGuard)
+    getProfile(@Req() req) {
+        return this.profileService.getUserProfile({ userId: req.user.userId })
+    }
 
     // Update username user
     @Patch("username/update")
