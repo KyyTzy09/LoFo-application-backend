@@ -22,13 +22,30 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   profile   Profile[]
+  items      Item[]
 }
 
 model Profile {
-  userId   String @id
+  userId   String  @id
   username String
-  info     String?  @default("Pengguna belum menambahkan info.")
-  address   String?
+  info     String? @default("Pengguna belum menambahkan info.")
+  address  String?
 
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Item {
+  itemId   String     @id @default(ulid())
+  userId   String
+  image    String
+  itemName String
+  itemInfo String?    @default("Info belum ditambahkan.")
+  status   ItemStatus @default(TERSEDIA)
+
+  user User @relation(fields: [userId], references: [userId])
+}
+
+enum ItemStatus {
+  TERSEDIA
+  HILANG
 }
