@@ -2,14 +2,14 @@ import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundExcep
 import { ItemRepository } from "./item.repository";
 import { CreateNewItemDto, DeleteItemDto, GetItemByIdDto, GetUserItemsDto, UpdateItemStatusDto } from "./item.dto";
 import { Qrservice } from "../qr/qr.service";
-import { ItemStatus } from "@prisma/client";
-import e from "express";
+import { Item, ItemStatus } from "@prisma/client";
+import { ApiResponseType } from "src/shared/types/response.type";
 
 @Injectable()
 export class ItemService {
     constructor(private readonly itemRepo: ItemRepository, private readonly qrService: Qrservice) { }
 
-    async getItemById(dto: GetItemByIdDto) {
+    async getItemById(dto: GetItemByIdDto): Promise<ApiResponseType<Item>> {
         const existingItem = await this.itemRepo.findById(dto)
         if (!existingItem) {
             throw new NotFoundException("This item doesn't exist")
@@ -18,7 +18,7 @@ export class ItemService {
         return { message: "Item data retrieved successfull", statusCode: HttpStatus.OK, data: existingItem }
     }
 
-    async getUserItems(dto: GetUserItemsDto) {
+    async getUserItems(dto: GetUserItemsDto): Promise<ApiResponseType<Item[]>> {
         const existingItems = await this.itemRepo.findByUserId(dto)
         if (existingItems.length === 0) {
             throw new NotFoundException("Items not found")
@@ -27,14 +27,14 @@ export class ItemService {
         return { message: "User items data retrieved successfull", statusCode: HttpStatus.OK, data: existingItems }
     }
 
-    async getAllItems() {
+    async getAllItems(): Promise<ApiResponseType<Item[]>> {
         const existingItems = await this.itemRepo.findAll()
         if (existingItems.length === 0) throw new NotFoundException("Items Not found")
 
         return { message: "items data retrieved successfull", statusCode: HttpStatus.OK, data: existingItems }
     }
 
-    async createNewItem(dto: CreateNewItemDto) {
+    async createNewItem(dto: CreateNewItemDto): Promise<ApiResponseType<Item>> {
         const existingItem = await this.itemRepo.findByName({ userId: dto.userId, name: dto.name })
         if (existingItem) {
             throw new ConflictException("Item already exist")
@@ -54,7 +54,7 @@ export class ItemService {
         return { message: "Item created successfull", statusCode: HttpStatus.CREATED, data: createdItem }
     }
 
-    async updateItemStatus(dto: UpdateItemStatusDto) {
+    async updateItemStatus(dto: UpdateItemStatusDto): Promise<ApiResponseType<Item>> {
         let status: ItemStatus = "TERSEDIA"
         if (dto.status === "TERSEDIA") {
             status = ItemStatus.TERSEDIA
@@ -71,7 +71,7 @@ export class ItemService {
         return { message: "Item status updated successfull", statusCode: HttpStatus.OK, data: updatedStatus }
     }
 
-    async deleteItemById(dto: DeleteItemDto) {
+    async deleteItemById(dto: DeleteItemDto): Promise<ApiResponseType<Item>> {
         const existingItem = await this.itemRepo.findByUnique(dto)
         if (!existingItem) throw new NotFoundException("Item doesn't exist")
 

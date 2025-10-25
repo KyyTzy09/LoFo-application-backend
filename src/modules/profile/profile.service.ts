@@ -2,12 +2,14 @@ import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { ProfileRepository } from "./profile.repository";
 import { UserRepository } from "../user/user.repository";
 import { GetProfileDto, UpdateAddressDto, UpdateInfoDto, UpdateProfileDto, UpdateUsernameDto } from "./profile.dto";
+import { ApiResponseType } from "src/shared/types/response.type";
+import { Profile } from "@prisma/client";
 
 @Injectable()
 export class ProfileService {
     constructor(private readonly profileRepo: ProfileRepository, private readonly userRepo: UserRepository) { }
 
-    async getUserProfile(dto: GetProfileDto) {
+    async getUserProfile(dto: GetProfileDto): Promise<ApiResponseType<Profile>> {
         const existingProfile = await this.profileRepo.findByUserId({ userId: dto.userId })
         if (!existingProfile) {
             throw new NotFoundException("Profile not found")
@@ -16,7 +18,7 @@ export class ProfileService {
         return { message: "Profile retrieved successfull", statusCode: HttpStatus.OK, data: existingProfile }
     }
 
-    async updateUsername(dto: UpdateUsernameDto) {
+    async updateUsername(dto: UpdateUsernameDto): Promise<ApiResponseType<Partial<Profile>>> {
         const existingProfile = await this.profileRepo.findByUserId({ userId: dto.userId })
         if (!existingProfile) {
             throw new NotFoundException("Profile not found")
@@ -26,7 +28,7 @@ export class ProfileService {
         return { message: "Username updated successfull", statusCode: HttpStatus.OK, data: updatedUsername }
     }
 
-    async updateInfo(dto: UpdateInfoDto) {
+    async updateInfo(dto: UpdateInfoDto): Promise<ApiResponseType<Partial<Profile>>> {
         const existingProfile = await this.profileRepo.findByUserId({ userId: dto.userId })
         if (!existingProfile) {
             throw new NotFoundException("Profile not found")
@@ -36,7 +38,7 @@ export class ProfileService {
         return { message: "Info updated successfull", statusCode: HttpStatus.OK, data: updatedInfo }
     }
 
-    async updateAddress(dto: UpdateAddressDto) {
+    async updateAddress(dto: UpdateAddressDto): Promise<ApiResponseType<Partial<Profile>>> {
         const existingProfile = await this.profileRepo.findByUserId({ userId: dto.userId })
         if (!existingProfile) {
             throw new NotFoundException("Profile not found")
@@ -46,7 +48,7 @@ export class ProfileService {
         return { message: "Info updated successfull", statusCode: HttpStatus.OK, data: updatedAddress }
     }
 
-    async updateProfile(dto: UpdateProfileDto) {
+    async updateProfile(dto: UpdateProfileDto): Promise<ApiResponseType<Profile>> {
         const existingProfile = await this.profileRepo.findByUserId({ userId: dto.userId })
         if (!existingProfile) {
             throw new NotFoundException("Profile not found")

@@ -4,12 +4,14 @@ import { GetSessionDto, LoginDto, RegisterDto } from "./auth.dto";
 import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
 import { ProfileRepository } from "../profile/profile.repository";
+import { ApiResponseType } from "src/shared/types/response.type";
+import { User } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
     constructor(private jwtService: JwtService, private readonly userRepo: UserRepository, private readonly profileRepo: ProfileRepository) { }
 
-    async register(dto: RegisterDto) {
+    async register(dto: RegisterDto): Promise<ApiResponseType<User>> {
         const existingUser = await this.userRepo.getByPhoneNumber({ phoneNumber: dto.phoneNumber })
         if (existingUser) {
             throw new ConflictException("This number phone is already in use")
@@ -21,7 +23,7 @@ export class AuthService {
         return { message: "Register successfull", statusCode: HttpStatus.CREATED, data: createdUser }
     }
 
-    async login(dto: LoginDto) {
+    async login(dto: LoginDto): Promise<{ message: string, statusCode: number, accessToken: string }> {
         const existingUser = await this.userRepo.getByPhoneNumber({ phoneNumber: dto.phoneNumber })
         if (!existingUser) {
             throw new NotFoundException("The user is not registered yet")
@@ -38,7 +40,7 @@ export class AuthService {
         return { message: "Login successfull", statusCode: HttpStatus.OK, accessToken }
     }
 
-    async getSession(dto: GetSessionDto) {
+    async getSession(dto: GetSessionDto): Promise<ApiResponseType<User>> {
         const existingUser = await this.userRepo.getByUserId({ userId: dto.userId })
         if (!existingUser) {
             throw new NotFoundException("The user is not registered yet")

@@ -7,7 +7,7 @@ import cloudinary from "src/shared/configs/cloudinary.config";
 export class Qrservice {
     constructor() { }
 
-    async generateQR(dto: GenerateQRDto) {
+    async generateQR(dto: GenerateQRDto): Promise<Buffer> {
         const qrDataurl = await QrCode.toDataURL(dto.itemId, {
             type: "image/png",
             width: 300,
@@ -18,7 +18,7 @@ export class Qrservice {
         return image
     }
 
-    async uploadQr(dto: UploadQRDto) {
+    async uploadQr(dto: UploadQRDto): Promise<{ data: string }> {
         const result = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream({
                 allowed_formats: ["jpg", "png", "webp"],
