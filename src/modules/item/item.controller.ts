@@ -12,12 +12,14 @@ import { CreateItemResponseDto, DeleteItemResponseDto, GetAllItemsResponseDto, G
 export class ItemController {
     constructor(private readonly itemService: ItemService) { }
 
+    // Get all items
     @ApiResponse({ type: GetAllItemsResponseDto })
     @Get("get")
     getAllItems() {
         return this.itemService.getAllItems()
     }
 
+    // Get user items
     @ApiResponse({ type: GetuserItemsResponseDto })
     @ApiBearerAuth()
     @Get("user/get")
@@ -26,12 +28,14 @@ export class ItemController {
         return this.itemService.getUserItems({ userId: req.user.userId })
     }
 
+    // Get item by id
     @ApiResponse({ type: GetItemByIdResponseDto })
     @Get(":itemId/get")
     getItemById(@Param("itemId") itemId: string) {
         return this.itemService.getItemById({ itemId })
     }
 
+    // Create new item
     @ApiResponse({ status: HttpStatus.CREATED, type: CreateItemResponseDto })
     @Post("create")
     @ApiBearerAuth()
@@ -43,6 +47,7 @@ export class ItemController {
         return this.itemService.createNewItem({ userId: req.user.userId, image: file.path, name: dto.name, info: dto.info })
     }
 
+    // Update item status
     @ApiResponse({ type: UpdateItemStatusResponseDto })
     @Patch("update-status")
     @ApiBearerAuth()
@@ -51,6 +56,7 @@ export class ItemController {
         return this.itemService.updateItemStatus({ userId: req.user.userId, itemId: dto.itemId, status: dto.status })
     }
 
+    // Delete item by id
     @ApiResponse({ type: DeleteItemResponseDto })
     @Delete(":itemId/delete")
     @ApiBearerAuth()
