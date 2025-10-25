@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/generate"
 }
 
 datasource db {
@@ -22,7 +21,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   profile   Profile[]
-  items      Item[]
+  items     Item[]
 }
 
 model Profile {
@@ -41,6 +40,7 @@ model Item {
   itemName String
   itemInfo String?    @default("Info belum ditambahkan.")
   status   ItemStatus @default(TERSEDIA)
+  qrUrl    String?     @db.Text
 
   user User @relation(fields: [userId], references: [userId])
 }
