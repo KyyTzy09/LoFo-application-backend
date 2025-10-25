@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ItemService } from "./item.service";
 import { AuthGuard } from "src/shared/guards/auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -26,5 +26,11 @@ export class ItemController {
     @UseGuards(AuthGuard)
     updateItemStatus(@Req() req, @Body() dto: UpdateItemStatusDto) {
         return this.itemService.updateItemStatus({ userId: req.user.userId, itemId: dto.itemId, status: dto.status })
+    }
+
+    @Delete(":itemId/delete")
+    @UseGuards(AuthGuard)
+    deleteItemById(@Req() req, @Param("itemId") itemId: string,) {
+        return this.itemService.deleteItemById({ userId: req.user.userId, itemId })
     }
 }

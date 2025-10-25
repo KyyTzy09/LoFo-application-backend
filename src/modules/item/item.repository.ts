@@ -66,4 +66,13 @@ export class ItemRepository {
             }
         })
     }
+
+    async deleteById(data: { itemId: string, userId: string }) {
+        return await this.prisma.item.delete({
+            where: {
+                itemId: data.itemId,
+                userId: data.userId
+            }
+        })
+    }
 }

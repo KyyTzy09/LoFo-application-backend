@@ -37,3 +37,13 @@ export class UpdateItemStatusDto {
     @IsString()
     status: string
 }
+
+export class DeleteItemDto {
+    @IsNotEmpty()
+    @IsString()
+    userId: string
+
+    @IsNotEmpty()
+    @IsString()
+    itemId: string
+}

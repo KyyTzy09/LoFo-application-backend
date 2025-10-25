@@ -1,6 +1,6 @@
 import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { ItemRepository } from "./item.repository";
-import { CreateNewItemDto, GetItemByIdDto, UpdateItemStatusDto } from "./item.dto";
+import { CreateNewItemDto, DeleteItemDto, GetItemByIdDto, UpdateItemStatusDto } from "./item.dto";
 import { Qrservice } from "../qr/qr.service";
 import { ItemStatus } from "@prisma/client";
 import e from "express";
@@ -44,6 +44,14 @@ export class ItemService {
 
         const updatedStatus = await this.itemRepo.updateStatus({ itemId: dto.itemId, status })
         return { message: "Item status updated successfull", statusCode: HttpStatus.OK, data: updatedStatus }
+    }
+
+    async deleteItemById(dto: DeleteItemDto) {
+        const existingItem = await this.itemRepo.findByUnique(dto)
+        if (!existingItem) throw new NotFoundException("Item doesn't exist")
+
+        const deletedItem = await this.itemRepo.deleteById(dto)
+        return { message: "Item deleted successfull", statusCode: HttpStatus.OK, data: deletedItem }
     }
 
     async getItemById(dto: GetItemByIdDto) {
