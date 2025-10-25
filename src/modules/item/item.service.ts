@@ -13,14 +13,17 @@ export class ItemService {
             throw new ConflictException("Item already exist")
         }
 
-        const createdItem = await this.itemRepo.createItem(dto)
+        let createdItem = await this.itemRepo.createItem(dto)
         const generateQr = await this.qrService.generateQR({ itemId: createdItem.itemId })
         if (!generateQr) {
             throw new HttpException("Generate QR error", HttpStatus.INTERNAL_SERVER_ERROR)
         }
 
         const uploadedQr = await this.qrService.uploadQr({ qrImage: generateQr })
+        if (uploadedQr) {
+            createdItem = await this.itemRepo.updateQr({ itemId: createdItem.itemId, qrUrl: uploadedQr.data })
+        }
 
-        return { message: "Item created successfull", statusCode: HttpStatus.CREATED, data: createdItem, qr: uploadedQr.data }
+        return { message: "Item created successfull", statusCode: HttpStatus.CREATED, data: createdItem }
     }
 }

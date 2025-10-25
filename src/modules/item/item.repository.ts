@@ -25,6 +25,14 @@ export class ItemRepository {
         })
     }
 
-    async updateQr(){
+    async updateQr(data: { itemId: string, qrUrl: string }) {
+        return await this.prisma.item.update({
+            where: {
+                itemId: data.itemId
+            },
+            data: {
+                qrUrl: data.qrUrl
+            }
+        })
     }
 }
