@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { ItemStatus } from "@prisma/client";
+import { Item, ItemStatus } from "@prisma/client";
 
 @Injectable()
 export class ItemRepository {
@@ -17,7 +17,7 @@ export class ItemRepository {
         })
     }
 
-    async findByUserId(data: { userId: string }) {
+    async findByUserId(data: { userId: string }): Promise<Item[]> {
         return await this.prisma.item.findMany({
             where: {
                 userId: data.userId
@@ -39,7 +39,7 @@ export class ItemRepository {
         })
     }
 
-    async findByUnique(data: { userId: string, itemId: string }) {
+    async findByUnique(data: { userId: string, itemId: string }): Promise<Item | null> {
         return await this.prisma.item.findUnique({
             where: {
                 itemId: data.itemId,
@@ -48,7 +48,7 @@ export class ItemRepository {
         })
     }
 
-    async findByName(data: { name: string, userId: string }) {
+    async findByName(data: { name: string, userId: string }): Promise<Item | null> {
         return await this.prisma.item.findFirst({
             where: {
                 userId: data.userId,
@@ -57,7 +57,7 @@ export class ItemRepository {
         })
     }
 
-    async createItem(data: { userId: string, name: string, info: string, image: string }) {
+    async createItem(data: { userId: string, name: string, info: string, image: string }): Promise<Item> {
         return await this.prisma.item.create({
             data: {
                 itemName: data.name,
@@ -68,7 +68,7 @@ export class ItemRepository {
         })
     }
 
-    async updateStatus(data: { itemId: string, status: ItemStatus }) {
+    async updateStatus(data: { itemId: string, status: ItemStatus }): Promise<Item> {
         return await this.prisma.item.update({
             where: {
                 itemId: data.itemId
@@ -79,7 +79,7 @@ export class ItemRepository {
         })
     }
 
-    async updateQr(data: { itemId: string, qrUrl: string }) {
+    async updateQr(data: { itemId: string, qrUrl: string }): Promise<Item> {
         return await this.prisma.item.update({
             where: {
                 itemId: data.itemId
@@ -90,7 +90,7 @@ export class ItemRepository {
         })
     }
 
-    async deleteById(data: { itemId: string, userId: string }) {
+    async deleteById(data: { itemId: string, userId: string }): Promise<Item> {
         return await this.prisma.item.delete({
             where: {
                 itemId: data.itemId,
