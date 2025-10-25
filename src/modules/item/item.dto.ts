@@ -19,7 +19,7 @@ export class CreateNewItemDto {
     @ApiProperty({
         name: "file",
         type: "null",
-        description: "(Note: Di body bernama file bukan image) Masukan file gambar/foto barang yang akan ditambahkan",
+        description: "Masukan file gambar/foto barang yang akan ditambahkan",
     })
     @IsString()
     @IsOptional()

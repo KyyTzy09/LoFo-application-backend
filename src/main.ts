@@ -14,6 +14,7 @@ async function bootstrap() {
     .setTitle("LoFo-API")
     .setDescription("Find your lost items")
     .setVersion("1.0")
+    .addBearerAuth()
     .build()
   const documentFactory = () => SwaggerModule.createDocument(app, config)
   SwaggerModule.setup("/docs", app, documentFactory)

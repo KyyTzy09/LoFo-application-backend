@@ -2,7 +2,9 @@ import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginDto, RegisterDto } from "./auth.dto";
 import { AuthGuard } from "src/shared/guards/auth.guard";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Auth-path")
 @Controller("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
@@ -20,6 +22,7 @@ export class AuthController {
 
     // Check login session
     @Get("session")
+    @ApiBearerAuth()
     @UseGuards(AuthGuard)
     getSession(@Req() req) {
         return this.authService.getSession({ userId: req.user.userId })
