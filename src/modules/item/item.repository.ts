@@ -4,6 +4,16 @@ import { PrismaService } from "../prisma/prisma.service";
 @Injectable()
 export class ItemRepository {
     constructor(private readonly prisma: PrismaService) { }
+    async findById(data: { itemId: string }) {
+        return await this.prisma.item.findUnique({
+            where: {
+                itemId: data.itemId
+            },
+            include: {
+                user: true
+            }
+        })
+    }
 
     async findByName(data: { name: string, userId: string }) {
         return await this.prisma.item.findFirst({

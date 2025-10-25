@@ -1,6 +1,6 @@
-import { ConflictException, HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { ItemRepository } from "./item.repository";
-import { CreateNewItemDto } from "./item.dto";
+import { CreateNewItemDto, GetItemByIdDto } from "./item.dto";
 import { Qrservice } from "../qr/qr.service";
 
 @Injectable()
@@ -25,5 +25,14 @@ export class ItemService {
         }
 
         return { message: "Item created successfull", statusCode: HttpStatus.CREATED, data: createdItem }
+    }
+
+    async getItemById(dto: GetItemByIdDto) {
+        const existingItem = await this.itemRepo.findById(dto)
+        if (!existingItem) {
+            throw new NotFoundException("This item doesn't exist")
+        }
+
+        return { message: "Item data retrieved successfull", statusCode: HttpStatus.OK, data: existingItem }
     }
 }

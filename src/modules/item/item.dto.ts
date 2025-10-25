@@ -17,3 +17,9 @@ export class CreateNewItemDto {
     @IsNotEmpty()
     info: string
 }
+
+export class GetItemByIdDto {
+    @IsString()
+    @IsNotEmpty()
+    itemId: string
+}
