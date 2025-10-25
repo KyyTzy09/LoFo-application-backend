@@ -12,38 +12,38 @@ export class AuthService {
     async register(dto: RegisterDto) {
         const existingUser = await this.userRepo.getByPhoneNumber({ phoneNumber: dto.phoneNumber })
         if (existingUser) {
-            throw new ConflictException("Nomor telepon ini sudah pernah digunakan")
+            throw new ConflictException("This number phone is already in use")
         }
 
         const hashedPassword = await bcrypt.hash(dto.password, 10)
         const createdUser = await this.userRepo.createUser({ phoneNumber: dto.phoneNumber, password: hashedPassword })
         await this.profileRepo.createProfile({ userId: createdUser.userId, name: dto.username })
-        return { message: "Berhasil membuat akun baru", statusCode: HttpStatus.CREATED, data: createdUser }
+        return { message: "Register successfull", statusCode: HttpStatus.CREATED, data: createdUser }
     }
 
     async login(dto: LoginDto) {
         const existingUser = await this.userRepo.getByPhoneNumber({ phoneNumber: dto.phoneNumber })
         if (!existingUser) {
-            throw new NotFoundException("Akun tidak ditemukan")
+            throw new NotFoundException("The user is not registered yet")
         }
 
         const comparePassword = await bcrypt.compare(dto.password, existingUser.password)
         if (!comparePassword) {
-            throw new BadRequestException("Password yang anda masukan salah")
+            throw new BadRequestException("Incorrect password")
         }
         const accessToken = await this.jwtService.sign({ userId: existingUser.userId }, {
             expiresIn: "1d",
         })
 
-        return { message: "Login berhasil", statusCode: HttpStatus.OK, accessToken }
+        return { message: "Login successfull", statusCode: HttpStatus.OK, accessToken }
     }
 
     async getSession(dto: GetSessionDto) {
         const existingUser = await this.userRepo.getByUserId({ userId: dto.userId })
         if (!existingUser) {
-            throw new NotFoundException("Akun tidak ditemukan")
+            throw new NotFoundException("The user is not registered yet")
         }
 
-        return { message: "Berhasil mendapatkan sesi login", statusCode: HttpStatus.OK, data: existingUser }
+        return { message: "Session retrieved successfull", statusCode: HttpStatus.OK, data: existingUser }
     }
 }
