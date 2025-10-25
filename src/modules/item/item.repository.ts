@@ -5,6 +5,18 @@ import { ItemStatus } from "@prisma/client";
 @Injectable()
 export class ItemRepository {
     constructor(private readonly prisma: PrismaService) { }
+
+    async findAll() {
+        return await this.prisma.item.findMany({
+            include: {
+                user: true
+            },
+            orderBy: {
+                itemName: "asc"
+            }
+        })
+    }
+    
     async findById(data: { itemId: string }) {
         return await this.prisma.item.findUnique({
             where: {

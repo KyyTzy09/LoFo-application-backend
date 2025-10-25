@@ -8,6 +8,22 @@ import e from "express";
 @Injectable()
 export class ItemService {
     constructor(private readonly itemRepo: ItemRepository, private readonly qrService: Qrservice) { }
+    
+    async getItemById(dto: GetItemByIdDto) {
+        const existingItem = await this.itemRepo.findById(dto)
+        if (!existingItem) {
+            throw new NotFoundException("This item doesn't exist")
+        }
+
+        return { message: "Item data retrieved successfull", statusCode: HttpStatus.OK, data: existingItem }
+    }
+
+    async getAllItems() {
+        const existingItems = await this.itemRepo.findAll()
+        if (existingItems.length === 0) throw new NotFoundException("Items Not found")
+
+        return { message: "items data retrieved successfull", statusCode: HttpStatus.OK, data: existingItems }
+    }
 
     async createNewItem(dto: CreateNewItemDto) {
         const existingItem = await this.itemRepo.findByName({ userId: dto.userId, name: dto.name })
@@ -52,14 +68,5 @@ export class ItemService {
 
         const deletedItem = await this.itemRepo.deleteById(dto)
         return { message: "Item deleted successfull", statusCode: HttpStatus.OK, data: deletedItem }
-    }
-
-    async getItemById(dto: GetItemByIdDto) {
-        const existingItem = await this.itemRepo.findById(dto)
-        if (!existingItem) {
-            throw new NotFoundException("This item doesn't exist")
-        }
-
-        return { message: "Item data retrieved successfull", statusCode: HttpStatus.OK, data: existingItem }
     }
 }

@@ -9,6 +9,11 @@ import { CreateNewItemDto, UpdateItemStatusDto } from "./item.dto";
 export class ItemController {
     constructor(private readonly itemService: ItemService) { }
 
+    @Get("get")
+    getAllItems() {
+        return this.itemService.getAllItems()
+    }
+
     @Get(":itemId/get")
     getItemById(@Param("itemId") itemId: string) {
         return this.itemService.getItemById({ itemId })
