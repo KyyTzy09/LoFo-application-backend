@@ -23,3 +23,17 @@ export class GetItemByIdDto {
     @IsNotEmpty()
     itemId: string
 }
+
+export class UpdateItemStatusDto {
+    @IsOptional()
+    @IsString()
+    userId: string
+
+    @IsNotEmpty()
+    @IsString()
+    itemId: string
+
+    @IsNotEmpty()
+    @IsString()
+    status: string
+}

@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
+import { ItemStatus } from "@prisma/client";
 
 @Injectable()
 export class ItemRepository {
@@ -11,6 +12,15 @@ export class ItemRepository {
             },
             include: {
                 user: true
+            }
+        })
+    }
+
+    async findByUnique(data: { userId: string, itemId: string }) {
+        return await this.prisma.item.findUnique({
+            where: {
+                itemId: data.itemId,
+                userId: data.userId
             }
         })
     }
@@ -31,6 +41,17 @@ export class ItemRepository {
                 itemInfo: data.info,
                 image: data.image,
                 userId: data.userId
+            }
+        })
+    }
+
+    async updateStatus(data: { itemId: string, status: ItemStatus }) {
+        return await this.prisma.item.update({
+            where: {
+                itemId: data.itemId
+            },
+            data: {
+                status: data.status
             }
         })
     }

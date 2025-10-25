@@ -1,7 +1,9 @@
 import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { ItemRepository } from "./item.repository";
-import { CreateNewItemDto, GetItemByIdDto } from "./item.dto";
+import { CreateNewItemDto, GetItemByIdDto, UpdateItemStatusDto } from "./item.dto";
 import { Qrservice } from "../qr/qr.service";
+import { ItemStatus } from "@prisma/client";
+import e from "express";
 
 @Injectable()
 export class ItemService {
@@ -25,6 +27,23 @@ export class ItemService {
         }
 
         return { message: "Item created successfull", statusCode: HttpStatus.CREATED, data: createdItem }
+    }
+
+    async updateItemStatus(dto: UpdateItemStatusDto) {
+        let status: ItemStatus = "TERSEDIA"
+        if (dto.status === "TERSEDIA") {
+            status = ItemStatus.TERSEDIA
+        } else if (dto.status === "HILANG") {
+            status = ItemStatus.HILANG
+        }
+
+        const existingItem = await this.itemRepo.findByUnique({ itemId: dto.itemId, userId: dto.userId })
+        if (!existingItem) {
+            throw new NotFoundException("Item doesn't exist")
+        }
+
+        const updatedStatus = await this.itemRepo.updateStatus({ itemId: dto.itemId, status })
+        return { message: "Item status updated successfull", statusCode: HttpStatus.OK, data: updatedStatus }
     }
 
     async getItemById(dto: GetItemByIdDto) {

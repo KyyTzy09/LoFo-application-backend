@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ItemService } from "./item.service";
 import { AuthGuard } from "src/shared/guards/auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/shared/configs/multer.config";
-import { CreateNewItemDto } from "./item.dto";
+import { CreateNewItemDto, UpdateItemStatusDto } from "./item.dto";
 
 @Controller('item')
 export class ItemController {
@@ -20,5 +20,11 @@ export class ItemController {
     @UseInterceptors(FileInterceptor("file", { storage }))
     createNewItem(@Req() req, @UploadedFile() file: Express.Multer.File, @Body() dto: CreateNewItemDto) {
         return this.itemService.createNewItem({ userId: req.user.userId, image: file.path, name: dto.name, info: dto.info })
+    }
+
+    @Patch("update-status")
+    @UseGuards(AuthGuard)
+    updateItemStatus(@Req() req, @Body() dto: UpdateItemStatusDto) {
+        return this.itemService.updateItemStatus({ userId: req.user.userId, itemId: dto.itemId, status: dto.status })
     }
 }
