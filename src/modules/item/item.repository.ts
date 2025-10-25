@@ -24,4 +24,7 @@ export class ItemRepository {
             }
         })
     }
+
+    async updateQr(){
+    }
 }
