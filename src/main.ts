@@ -10,6 +10,7 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
     transform: true
   }))
+  app.enableCors()
   const config = new DocumentBuilder()
     .setTitle("LoFo-API")
     .setDescription("Find your lost items")
