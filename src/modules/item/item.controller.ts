@@ -4,18 +4,21 @@ import { AuthGuard } from "src/shared/guards/auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { storage } from "src/shared/configs/multer.config";
 import { CreateNewItemDto, UpdateItemStatusDto } from "./item.dto";
-import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { CreateItemResponseDto, DeleteItemResponseDto, GetAllItemsResponseDto, GetItemByIdResponseDto, GetuserItemsResponseDto, UpdateItemStatusResponseDto } from "./item.response.dto";
 
 @ApiTags("Item-path")
 @Controller('item')
 export class ItemController {
     constructor(private readonly itemService: ItemService) { }
 
+    @ApiResponse({ type: GetAllItemsResponseDto })
     @Get("get")
     getAllItems() {
         return this.itemService.getAllItems()
     }
 
+    @ApiResponse({ type: GetuserItemsResponseDto })
     @ApiBearerAuth()
     @Get("user/get")
     @UseGuards(AuthGuard)
@@ -23,11 +26,13 @@ export class ItemController {
         return this.itemService.getUserItems({ userId: req.user.userId })
     }
 
+    @ApiResponse({ type: GetItemByIdResponseDto })
     @Get(":itemId/get")
     getItemById(@Param("itemId") itemId: string) {
         return this.itemService.getItemById({ itemId })
     }
 
+    @ApiResponse({ status: HttpStatus.CREATED, type: CreateItemResponseDto })
     @Post("create")
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
@@ -38,6 +43,7 @@ export class ItemController {
         return this.itemService.createNewItem({ userId: req.user.userId, image: file.path, name: dto.name, info: dto.info })
     }
 
+    @ApiResponse({ type: UpdateItemStatusResponseDto })
     @Patch("update-status")
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
@@ -45,6 +51,7 @@ export class ItemController {
         return this.itemService.updateItemStatus({ userId: req.user.userId, itemId: dto.itemId, status: dto.status })
     }
 
+    @ApiResponse({ type: DeleteItemResponseDto })
     @Delete(":itemId/delete")
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
