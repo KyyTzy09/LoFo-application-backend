@@ -24,6 +24,12 @@ export class GetItemByIdDto {
     itemId: string
 }
 
+export class GetUserItemsDto {
+    @IsString()
+    @IsNotEmpty()
+    userId: string
+}
+
 export class UpdateItemStatusDto {
     @IsOptional()
     @IsString()

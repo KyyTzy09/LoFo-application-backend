@@ -1,6 +1,6 @@
 import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { ItemRepository } from "./item.repository";
-import { CreateNewItemDto, DeleteItemDto, GetItemByIdDto, UpdateItemStatusDto } from "./item.dto";
+import { CreateNewItemDto, DeleteItemDto, GetItemByIdDto, GetUserItemsDto, UpdateItemStatusDto } from "./item.dto";
 import { Qrservice } from "../qr/qr.service";
 import { ItemStatus } from "@prisma/client";
 import e from "express";
@@ -8,7 +8,7 @@ import e from "express";
 @Injectable()
 export class ItemService {
     constructor(private readonly itemRepo: ItemRepository, private readonly qrService: Qrservice) { }
-    
+
     async getItemById(dto: GetItemByIdDto) {
         const existingItem = await this.itemRepo.findById(dto)
         if (!existingItem) {
@@ -16,6 +16,15 @@ export class ItemService {
         }
 
         return { message: "Item data retrieved successfull", statusCode: HttpStatus.OK, data: existingItem }
+    }
+
+    async getUserItems(dto: GetUserItemsDto) {
+        const existingItems = await this.itemRepo.findByUserId(dto)
+        if (existingItems.length === 0) {
+            throw new NotFoundException("Items not found")
+        }
+
+        return { message: "User items data retrieved successfull", statusCode: HttpStatus.OK, data: existingItems }
     }
 
     async getAllItems() {

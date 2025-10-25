@@ -14,6 +14,12 @@ export class ItemController {
         return this.itemService.getAllItems()
     }
 
+    @Get("user/get")
+    @UseGuards(AuthGuard)
+    getUserItems(@Req() req) {
+        return this.itemService.getUserItems({ userId: req.user.userId })
+    }
+
     @Get(":itemId/get")
     getItemById(@Param("itemId") itemId: string) {
         return this.itemService.getItemById({ itemId })

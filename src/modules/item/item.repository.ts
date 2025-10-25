@@ -16,7 +16,18 @@ export class ItemRepository {
             }
         })
     }
-    
+
+    async findByUserId(data: { userId: string }) {
+        return await this.prisma.item.findMany({
+            where: {
+                userId: data.userId
+            },
+            orderBy: {
+                itemName: "asc"
+            }
+        })
+    }
+
     async findById(data: { itemId: string }) {
         return await this.prisma.item.findUnique({
             where: {
