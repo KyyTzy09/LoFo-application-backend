@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://nestjs.com/" target="_blank">
+  <a href="https://lofo-api.up.railway.app" target="_blank">
     <img src="https://i.pinimg.com/736x/42/9e/7b/429e7ba595baf2832b43aa6c48a50662.jpg" width="200" alt="NestJS Logo" />
   </a>
 </p>
@@ -7,15 +7,15 @@
 🚀 Gambaran Umum
 
 Lofo API adalah layanan backend yang dirancang untuk aplikasi mobile yang memungkinkan pengguna untuk:
-
+```
 🔐 Melakukan autentikasi dengan aman (login/registrasi)
 
 🏷️ Membuat dan mengelola barang
 
 🧾 Menghasilkan serta mengambil QR Code untuk setiap barang
-
+```
 🧩 Teknologi yang Digunakan
-
+```
 Framework: NestJS
 
 ORM: Prisma
@@ -28,7 +28,7 @@ Bahasa: TypeScript
 Autentikasi: JWT (JSON Web Token)
 
 Lainnya: Swagger untuk dokumentasi API, Cloudinary untuk upload gambar (opsional)
-
+```
 🛠️ Langkah Instalasi
 ``` bash
 # 1. Instal dependensi
