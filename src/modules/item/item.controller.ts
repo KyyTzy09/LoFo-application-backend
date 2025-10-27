@@ -28,6 +28,11 @@ export class ItemController {
         return this.itemService.getUserItems({ userId: req.user.userId })
     }
 
+    @Get("lost")
+    getLostItems() {
+        return this.itemService.getLostItems()
+    }
+
     // Get item by id
     @ApiResponse({ type: GetItemByIdResponseDto })
     @Get(":itemId/get")

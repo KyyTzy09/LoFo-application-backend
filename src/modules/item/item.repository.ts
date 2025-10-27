@@ -34,6 +34,23 @@ export class ItemRepository {
         })
     }
 
+    async findLostItems() {
+        return await this.prisma.item.findMany({
+            where: {
+                status: "HILANG"
+            },
+            include: {
+                user: {
+                    select: {
+                        userId: true,
+                        phoneNumber: true,
+                        profile: true
+                    }
+                }
+            }
+        })
+    }
+
     async findById(data: { itemId: string }) {
         return await this.prisma.item.findUnique({
             where: {

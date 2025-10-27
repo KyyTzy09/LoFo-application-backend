@@ -27,6 +27,15 @@ export class ItemService {
         return { message: "User items data retrieved successfull", statusCode: HttpStatus.OK, data: existingItems }
     }
 
+    async getLostItems(): Promise<ApiResponseType<Item[]>> {
+        const existingLostItems = await this.itemRepo.findLostItems()
+        if (existingLostItems.length === 0) {
+            throw new NotFoundException("Lost items don't exist")
+        }
+
+        return { message: "Lost items retrived successfull", statusCode: HttpStatus.OK, data: existingLostItems }
+    }
+
     async getAllItems(): Promise<ApiResponseType<Item[]>> {
         const existingItems = await this.itemRepo.findAll()
         if (existingItems.length === 0) throw new NotFoundException("Items Not found")
