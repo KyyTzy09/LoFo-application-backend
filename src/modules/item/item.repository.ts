@@ -9,7 +9,13 @@ export class ItemRepository {
     async findAll() {
         return await this.prisma.item.findMany({
             include: {
-                user: true
+                user: {
+                    select: {
+                        userId: true,
+                        phoneNumber: true,
+                        profile: true
+                    }
+                }
             },
             orderBy: {
                 itemName: "asc"
@@ -34,7 +40,13 @@ export class ItemRepository {
                 itemId: data.itemId
             },
             include: {
-                user: true
+                user: {
+                    select: {
+                        userId: true,
+                        phoneNumber: true,
+                        profile: true
+                    }
+                }
             }
         })
     }
