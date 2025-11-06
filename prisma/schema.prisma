@@ -20,7 +20,7 @@ model User {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  profile   Profile[]
+  profile   Profile?
   items     Item[]
 }
 
