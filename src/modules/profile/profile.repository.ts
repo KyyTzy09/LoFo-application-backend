@@ -20,6 +20,9 @@ export class ProfileRepository {
         return await this.prisma.profile.findUnique({
             where: {
                 userId: data.userId
+            },
+            include : {
+                user : true
             }
         })
     }

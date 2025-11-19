@@ -10,6 +10,9 @@ export class UserRepository {
         return await this.prisma.user.findUnique({
             where: {
                 userId: data.userId
+            },
+            include: {
+                profile: true
             }
         })
     }
