@@ -1,7 +1,7 @@
 import { HttpStatus } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import { $Enums, Item, Prisma } from "@prisma/client";
 import { UserDto } from "../user/user.dto";
+import { $Enums, Item, Prisma } from "generated/client/client";
 
 type ItemIncludeUser = Prisma.ItemGetPayload<{ include: { user: true } }>
 

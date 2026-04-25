@@ -2,8 +2,8 @@ import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundExcep
 import { ItemRepository } from "./item.repository";
 import { CreateNewItemDto, DeleteItemDto, GetItemByIdDto, GetUserItemsDto, UpdateItemStatusDto } from "./item.dto";
 import { Qrservice } from "../qr/qr.service";
-import { Item, ItemStatus } from "@prisma/client";
 import { ApiResponseType } from "src/shared/types/response.type";
+import { Item, ItemStatus } from "generated/client/client";
 
 @Injectable()
 export class ItemService {

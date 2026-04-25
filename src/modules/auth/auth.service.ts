@@ -4,8 +4,8 @@ import { GetSessionDto, LoginDto, RegisterDto } from "./auth.dto";
 import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
 import { ProfileRepository } from "../profile/profile.repository";
-import { ApiResponseType } from "src/shared/types/response.type";
-import { User } from "@prisma/client";
+import { ApiResponseType } from "src/shared/types/response.type";import { User } from "generated/client/client";
+;
 
 @Injectable()
 export class AuthService {

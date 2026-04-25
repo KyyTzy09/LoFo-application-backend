@@ -3,7 +3,7 @@ import { ProfileRepository } from "./profile.repository";
 import { UserRepository } from "../user/user.repository";
 import { GetProfileDto, UpdateAddressDto, UpdateInfoDto, UpdateProfileDto, UpdateUsernameDto } from "./profile.dto";
 import { ApiResponseType } from "src/shared/types/response.type";
-import { Profile } from "@prisma/client";
+import { Profile } from "generated/client/client";
 
 @Injectable()
 export class ProfileService {

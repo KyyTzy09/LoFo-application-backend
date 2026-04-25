@@ -1,6 +1,6 @@
 import { HttpStatus } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import { Profile } from "@prisma/client";
+import { Profile } from "generated/client/client";
 
 // Full type
 export class ProfileDto implements Profile {
