@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
+import { Profile } from "@prisma/client";
 import { GetBatchResult } from "@prisma/client/runtime/library";
-import { Profile } from "generated/client/client";
 
 @Injectable()
 export class ProfileRepository {

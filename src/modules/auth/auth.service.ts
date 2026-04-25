@@ -5,7 +5,7 @@ import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
 import { ProfileRepository } from "../profile/profile.repository";
 import { ApiResponseType } from "src/shared/types/response.type";
-import { User } from "generated/client/client";
+import { User } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
@@ -18,7 +18,7 @@ export class AuthService {
         }
 
         const hashedPassword = await bcrypt.hash(dto.password, 10)
-        const createdUser = await this.userRepo.createUser({ username: dto.username, phoneNumber: dto.phoneNumber, password: hashedPassword })
+        const createdUser = await this.userRepo.createUser({ phoneNumber: dto.phoneNumber, password: hashedPassword })
         await this.profileRepo.createProfile({ userId: createdUser.userId, name: dto.username })
         return { message: "Register successfull", statusCode: HttpStatus.CREATED, data: createdUser }
     }

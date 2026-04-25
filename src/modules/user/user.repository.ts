@@ -25,17 +25,9 @@ export class UserRepository {
         })
     }
 
-    async createUser(data: { phoneNumber: string, password: string, username: string }): Promise<User> {
+    async createUser(data: { phoneNumber: string, password: string }): Promise<User> {
         return await this.prisma.user.create({
-            data: {
-                phoneNumber: data.phoneNumber,
-                password: data.password,
-                profile: {
-                    create: {
-                        username: data.username
-                    }
-                }
-            }
+            data
         })
     }
 }
